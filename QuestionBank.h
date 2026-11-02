@@ -1,52 +1,43 @@
 ﻿// QuestionBank.h
-// 题库类（实验二：组合关系中的整体类）
-// 整体类包含部分类（三角形题目类）的对象，体现 has-a 的组合关系
+// 题库类的定义文件：管理多道几何图形题目
+// 用 STL 容器 vector 保存题目对象指针（实验五），用 fstream 保存/读取题目数据（实验六）
+// 对应知识点：组合关系（题库 has-a 多道题目）、vector、文件输入输出流
 #ifndef QUESTION_BANK_H
 #define QUESTION_BANK_H
 
 #include <string>
 #include <vector>
-#include "TriangleQuestion.h"
-
-using namespace std;
+#include "ShapeQuestion.h"
 
 class QuestionBank {
 private:
-    // 数据成员
-    string name_;                        // 题库名称
-    vector<TriangleQuestion> questions_; // 包含的所有题目（组合关系：整体包含部分）
-    int    totalScore_;                  // 所做题目的成绩（总分）
-    int    answeredCount_;               // 已作答题目数
-    double averageScore_;                // 平均分
+    std::string name_;                       // 题库名称
+    std::vector<ShapeQuestion*> questions_;  // 题目集合：题目对象指针的 vector（组合关系）
+    int totalScore_;                         // 练习总得分
+    int totalAnswered_;                      // 已作答的题目数
+    int correctCount_;                       // 答对的题目数
 
 public:
-    // 构造函数
-    QuestionBank();                      // 默认构造函数
-    QuestionBank(string name);           // 重载构造函数：指定题库名称
+    QuestionBank();                          // 默认构造函数
+    QuestionBank(std::string name);          // 重载构造函数
+    ~QuestionBank();                         // 析构函数：释放所有题目对象
 
-    // 基本操作：初始化 / 修改 / 获取
-    void   setName(string name);
-    string getName() const;
-    int    getQuestionCount() const;     // 获取题目数量
-    int    getTotalScore() const;
-    int    getAnsweredCount() const;
-    double getAverageScore() const;
+    std::string getName() const;
+    int getSize() const;                     // 返回题目数量（vector 的 size）
+    int getTotalScore() const;
+    double getAverage() const;               // 平均分
 
-    // 基本操作：输出显示
-    void showAllQuestions() const;       // 输出所有题目
-    void showScore() const;              // 输出成绩和平均分
+    void addQuestion(int type);              // 按图形类型随机生成一道题目（push_back）
+    bool deleteQuestion(int id);             // 按编号删除题目（erase）
+    ShapeQuestion* findQuestion(int id);     // 按编号查询题目
+    ShapeQuestion* getQuestionByIndex(int index);  // 按下标取题目（练习时随机抽题用）
+    void showAll();                          // 遍历输出全部题目
+    void clearAll();                         // 清空题库（clear）
 
-    // 其他操作：向题库内增加题目
-    void addQuestion(const TriangleQuestion& q);
-    // 其他操作：在题库内删除题目，成功返回true
-    bool deleteQuestion(int id);
-    // 其他操作：查询题库的题目（按编号查找），找不到返回NULL
-    TriangleQuestion* findQuestion(int id);
-    // 其他操作：按下标取题目（练习时随机抽题用）
-    TriangleQuestion* getQuestionByIndex(int index);
+    void saveToFile(std::string fileName);       // 实验六：把题目保存到文件
+    void loadFromFile(std::string fileName);     // 实验六：从文件读取题目恢复题库
 
-    // 其他操作：记录一次练习成绩（答对得10分）
-    void recordResult(bool isCorrect);
+    void recordResult(bool isCorrect);   // 记录一次练习成绩（答对得10分）
 };
 
-#endif
+#endif // QUESTION_BANK_H

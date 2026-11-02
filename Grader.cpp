@@ -1,13 +1,14 @@
 ﻿// Grader.cpp
 // 判卷类的定义文件：实现 Grader.h 中声明的成员函数
 #include "Grader.h"
+
 #include <iostream>
 using namespace std;
 
-// 判卷函数：判卷类的成员函数参数是三角形题目类的对象引用，
+// 判卷函数：判卷类的成员函数参数是题目类的对象引用，
 // 在函数中通过题目对象的公有成员函数读取答案、判断对错并修改其状态，
 // 这就是类之间的依赖关系（use-a）。
-bool Grader::judge(TriangleQuestion& q) {
+bool Grader::judge(ShapeQuestion& q) {
     // 1. 调用题目对象自身的 checkAnswer()，由对象完成答案比对，
     //    并更新自己的作答状态（isCorrect_ 是否答对）
     bool ok = q.checkAnswer();
